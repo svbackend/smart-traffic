@@ -1,5 +1,10 @@
 <template>
     <div id="app">
+        <div class="map-actions">
+            <a href="#!" @click="run">Start</a> |
+            <a href="#!" @click="stop">Stop</a> |
+            <a href="#!" v-if="interval === null" @click="iteration">Iteration++</a>
+        </div>
         <div class="map">
             <div class="line-y" v-for="y in verticalLines">
                 <div class="line-x" v-for="x in horizontalBoxes">
@@ -21,6 +26,7 @@
     data() {
       return {
         interval: null,
+        i: 0,
         positions: [],
         verticalLines: [],
         horizontalBoxes: [],
@@ -52,16 +58,21 @@
       },
       stop() {
         clearInterval(this.interval)
+        this.interval = null
       },
       iteration() {
         console.log('iteration')
         console.log(this.cars)
-        let carKey = this.getKey(9, 0);
-        this.cars[carKey] = {direction: 'down'};
-        let car2Key = this.getKey(0, 9);
-        this.cars[car2Key] = {direction: 'right'};
+        if (this.i % 2 === 0) {
+          let carKey = this.getKey(9, 0);
+          this.cars[carKey] = {direction: 'down'};
+          let car2Key = this.getKey(0, 9);
+          this.cars[car2Key] = {direction: 'right'};
+        }
+
         this.moveCars();
         this.$forceUpdate();
+        this.i++;
       },
       moveCars() {
         Object.keys(this.cars).forEach((key) => {
@@ -69,25 +80,49 @@
             return;
           }
           let car = this.cars[key];
-          if (car.direction === 'down') {
-            this.moveDown(key)
-          }
           if (car.direction === 'right') {
             this.moveRight(key)
+          }
+          if (car.direction === 'down') {
+            this.moveDown(key)
           }
         });
       },
       moveDown(carKey) {
         let position = this.getPositionByKey(carKey)
         position.y += 1;
+
+        let newPositionKey = this.getKey(position.x, position.y)
+
+        if (this.road.hasOwnProperty(newPositionKey) === false) {
+          delete this.cars[carKey]
+          return
+        }
+
+        if (this.cars.hasOwnProperty(newPositionKey) && this.cars[newPositionKey] !== null) {
+          return;
+        }
+
         this.cars[this.getKey(position.x, position.y)] = this.cars[carKey];
-        this.cars[carKey] = null
+        delete this.cars[carKey]
       },
       moveRight(carKey) {
         let position = this.getPositionByKey(carKey)
         position.x += 1;
-        this.cars[this.getKey(position.x, position.y)] = this.cars[carKey];
-        this.cars[carKey] = null
+        let newPositionKey = this.getKey(position.x, position.y)
+
+        if (this.road.hasOwnProperty(newPositionKey) === false) {
+          delete this.cars[carKey]
+          return
+        }
+
+        if (this.cars.hasOwnProperty(newPositionKey) && this.cars[newPositionKey] !== null) {
+          console.log('there already a car on position ' + newPositionKey)
+          return;
+        }
+
+        this.cars[newPositionKey] = this.cars[carKey];
+        delete this.cars[carKey]
       },
       getKey(x, y) {
         return x + '-' + y;
@@ -123,9 +158,6 @@
     created() {
       this.generateMap();
       this.run();
-      setTimeout(() => {
-        this.stop()
-      }, 5000)
     }
   }
 </script>
@@ -137,7 +169,6 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 60px;
     }
 
     .map {
