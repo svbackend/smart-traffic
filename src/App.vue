@@ -4,6 +4,7 @@
             <a href="#!" @click="run">Start</a> |
             <a href="#!" @click="stop">Stop</a> |
             <a href="#!" v-if="interval === null" @click="iteration">Iteration++</a>
+            ({{ carsPassed }} cars passed in {{ i }} iterations)
         </div>
         <div class="map">
             <div class="line-y" v-for="y in verticalLines">
@@ -35,6 +36,10 @@
         cars: {},
         road: {},
         map: {},
+        lights: {},
+        topLightCounter: 5,
+        leftLightCounter: 0,
+        carsPassed: 0,
       }
     },
     methods: {
@@ -49,6 +54,7 @@
         }
 
         this.loadRoad()
+        this.loadLights()
       },
       run() {
         console.log('run')
@@ -61,15 +67,18 @@
         this.interval = null
       },
       iteration() {
-        console.log('iteration')
-        console.log(this.cars)
-        if (this.i % 2 === 0) {
+        console.log('top: ' + this.lights[this.getKey(9, 8)].color)
+        console.log('left: ' + this.lights[this.getKey(8, 9)].color)
+        if (this.i % 5 === 0) {
           let carKey = this.getKey(9, 0);
           this.cars[carKey] = {direction: 'down'};
+        }
+        if (this.i % 2 === 0) {
           let car2Key = this.getKey(0, 9);
           this.cars[car2Key] = {direction: 'right'};
         }
 
+        this.trafficLightsLogic();
         this.moveCars();
         this.$forceUpdate();
         this.i++;
@@ -80,6 +89,14 @@
             return;
           }
           let car = this.cars[key];
+          if (this.lights.hasOwnProperty(key) && this.lights[key].color === 'red') {
+            return;
+          }
+
+          if (this.lights.hasOwnProperty(key) && this.lights[key] !== null) {
+            this.carsPassed++
+          }
+
           if (car.direction === 'right') {
             this.moveRight(key)
           }
@@ -117,12 +134,59 @@
         }
 
         if (this.cars.hasOwnProperty(newPositionKey) && this.cars[newPositionKey] !== null) {
-          console.log('there already a car on position ' + newPositionKey)
           return;
         }
 
         this.cars[newPositionKey] = this.cars[carKey];
         delete this.cars[carKey]
+      },
+      loadLights() {
+        this.lights[this.getKey(9, 8)] = {color: 'green'}
+        this.lights[this.getKey(8, 9)] = {color: 'red'}
+      },
+      trafficLightsLogic() {
+        let carsFromTopCount = 0;
+        let carsFromLeftCount = 0;
+        for (let y = 0; y <= 8; y++) {
+          if (this.cars.hasOwnProperty(this.getKey(9, y)) && this.cars[this.getKey(9, y)] !== null) {
+            carsFromTopCount++
+          }
+        }
+        for (let x = 0; x <= 8; x++) {
+          if (this.cars.hasOwnProperty(this.getKey(x, 9)) && this.cars[this.getKey(x, 9)] !== null) {
+            carsFromLeftCount++
+          }
+        }
+
+        //if (carsFromTopCount > carsFromLeftCount) {
+          if (this.lights[this.getKey(9, 8)].color === 'green') {
+            this.topLightCounter--;
+            if (carsFromTopCount > carsFromLeftCount && this.i % 2 === 0) {
+              this.topLightCounter++;
+              console.log('carsFromTopCount more than in left so increase counter by 1')
+              // if current line with green light have more cars dont decrease timer every 2nd iteration
+            }
+
+            if (this.topLightCounter === 0) {
+              this.lights[this.getKey(9, 8)] = {color: 'red'}
+              this.lights[this.getKey(8, 9)] = {color: 'green'}
+              this.leftLightCounter = carsFromLeftCount+1
+            }
+          } else {
+            this.leftLightCounter--;
+
+            if (carsFromLeftCount > carsFromTopCount && this.i % 2 === 0) {
+              this.leftLightCounter++;
+              // if current line with green light have more cars dont decrease timer every 2nd iteration
+            }
+
+            if (this.leftLightCounter === 0) {
+              this.lights[this.getKey(9, 8)] = {color: 'green'}
+              this.lights[this.getKey(8, 9)] = {color: 'red'}
+              this.topLightCounter = carsFromTopCount+1
+            }
+          }
+        //}
       },
       getKey(x, y) {
         return x + '-' + y;
