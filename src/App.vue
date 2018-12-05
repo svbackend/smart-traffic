@@ -6,12 +6,24 @@
             <a href="#!" v-if="interval === null" @click="iteration">Iteration++</a>
             ({{ carsPassed }} cars passed in {{ i }} iterations)
         </div>
+        <div class="modifiers-form">
+            <div class="field">
+                <label for="yCarsModifierField">Y line cars modifier:</label>
+                <input id="yCarsModifierField" type="number" v-model="yCarsModifier">
+            </div>
+            <div class="field">
+                <label for="xCarsModifierField">X line cars modifier:</label>
+                <input id="xCarsModifierField" type="number" v-model="xCarsModifier">
+            </div>
+        </div>
         <div class="map">
             <div class="line-y" v-for="y in verticalLines">
                 <div class="line-x" v-for="x in horizontalBoxes">
                     <div class="box" :class="{
                         'with-car': getCar(x, y) !== null,
-                        'with-road': getRoad(x, y) !== null
+                        'with-road': getRoad(x, y) !== null,
+                        'direction-y': getCar(x, y) !== null && getCar(x, y).direction === 'down',
+                        'direction-x': getCar(x, y) !== null && getCar(x, y).direction === 'right'
                         }">
                         {{ y }} / {{ x }}
                     </div>
@@ -40,6 +52,8 @@
         topLightCounter: 5,
         leftLightCounter: 0,
         carsPassed: 0,
+        xCarsModifier: 2,
+        yCarsModifier: 5,
       }
     },
     methods: {
@@ -57,7 +71,6 @@
         this.loadLights()
       },
       run() {
-        console.log('run')
         this.interval = setInterval(() => {
           this.iteration()
         }, 500)
@@ -67,13 +80,11 @@
         this.interval = null
       },
       iteration() {
-        console.log('top: ' + this.lights[this.getKey(9, 8)].color)
-        console.log('left: ' + this.lights[this.getKey(8, 9)].color)
-        if (this.i % 5 === 0) {
+        if (this.yCarsModifier !== 0 && this.i % this.yCarsModifier === 0) {
           let carKey = this.getKey(9, 0);
           this.cars[carKey] = {direction: 'down'};
         }
-        if (this.i % 2 === 0) {
+        if (this.xCarsModifier !== 0 && this.i % this.xCarsModifier === 0) {
           let car2Key = this.getKey(0, 9);
           this.cars[car2Key] = {direction: 'right'};
         }
@@ -259,6 +270,12 @@
                 background-color: grey;
                 &.with-car {
                     background-color: darkmagenta;
+                    &.direction-y {
+                        background-color: cornflowerblue;
+                    }
+                    &.direction-x {
+                        background-color: darkslategrey;
+                    }
                 }
             }
         }
