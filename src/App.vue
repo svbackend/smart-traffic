@@ -34,6 +34,8 @@
 </template>
 
 <script>
+  import {getMap} from "./maps/simpleCrossingMap";
+
   export default {
     name: 'app',
     data() {
@@ -53,19 +55,6 @@
       }
     },
     methods: {
-      generateMap() {
-
-        for (let y = 0; y < 20; y++) {
-          this.verticalLines.push(y)
-        }
-
-        for (let x = 0; x < 20; x++) {
-          this.horizontalBoxes.push(x)
-        }
-
-        this.loadRoad()
-        this.loadLights()
-      },
       run() {
         this.interval = setInterval(() => {
           this.iteration()
@@ -147,10 +136,7 @@
         this.cars[newPositionKey] = this.cars[carKey];
         delete this.cars[carKey]
       },
-      loadLights() {
-        this.lights[this.getKey(9, 8)] = {color: 'green'}
-        this.lights[this.getKey(8, 9)] = {color: 'red'}
-      },
+
       trafficLightsLogic() {
         let carsFromTopCount = 0;
         let carsFromLeftCount = 0;
@@ -213,21 +199,14 @@
           return this.road[this.getKey(x, y)];
         }
         return null;
-      },
-      loadRoad() {
-        for (let y = 0; y < this.verticalLines.length; y++) {
-          this.road[this.getKey(9, y)] = {};
-          this.road[this.getKey(10, y)] = {};
-        }
-
-        for (let x = 0; x < this.horizontalBoxes.length; x++) {
-          this.road[this.getKey(x,10)] = {};
-          this.road[this.getKey(x,9)] = {};
-        }
       }
     },
     created() {
-      this.generateMap();
+      let map = getMap(this.getKey);
+      this.verticalLines = map.y;
+      this.horizontalBoxes = map.x;
+      this.road = map.road;
+      this.lights = map.lights;
       this.run();
     }
   }
