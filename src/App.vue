@@ -139,6 +139,31 @@
       },
 
       trafficLightsLogic() {
+        let carsCountMap = {};
+
+        for (let key in this.lights) {
+          if (this.lights.hasOwnProperty(key) === false) {
+            continue;
+          }
+
+          let light = this.lights[key];
+
+          for (let ourLinePositionKey of light.ourLinePositions) {
+            let carPosition = getPositionByKey(ourLinePositionKey);
+            if (this.getCar(carPosition.x, carPosition.y) !== null) {
+              if (carsCountMap.hasOwnProperty(key) === true) {
+                carsCountMap[key] += 1;
+              } else {
+                carsCountMap[key] = 1;
+              }
+            }
+          }
+        }
+
+
+      },
+
+      trafficLightsLogicOld() {
         let carsFromTopCount = 0;
         let carsFromLeftCount = 0;
         for (let y = 0; y <= 8; y++) {
@@ -152,35 +177,33 @@
           }
         }
 
-        //if (carsFromTopCount > carsFromLeftCount) {
-          if (this.lights[this.getKey(9, 8)].color === 'green') {
-            this.topLightCounter--;
-            if (carsFromTopCount > carsFromLeftCount && this.i % 2 === 0) {
-              this.topLightCounter++;
-              console.log('carsFromTopCount more than in left so increase counter by 1')
-              // if current line with green light have more cars dont decrease timer every 2nd iteration
-            }
-
-            if (this.topLightCounter === 0) {
-              this.lights[this.getKey(9, 8)] = {color: 'red'}
-              this.lights[this.getKey(8, 9)] = {color: 'green'}
-              this.leftLightCounter = carsFromLeftCount+1
-            }
-          } else {
-            this.leftLightCounter--;
-
-            if (carsFromLeftCount > carsFromTopCount && this.i % 2 === 0) {
-              this.leftLightCounter++;
-              // if current line with green light have more cars dont decrease timer every 2nd iteration
-            }
-
-            if (this.leftLightCounter === 0) {
-              this.lights[this.getKey(9, 8)] = {color: 'green'}
-              this.lights[this.getKey(8, 9)] = {color: 'red'}
-              this.topLightCounter = carsFromTopCount+1
-            }
+        if (this.lights[this.getKey(9, 8)].color === 'green') {
+          this.topLightCounter--;
+          if (carsFromTopCount > carsFromLeftCount && this.i % 2 === 0) {
+            this.topLightCounter++;
+            console.log('carsFromTopCount more than in left so increase counter by 1')
+            // if current line with green light have more cars dont decrease timer every 2nd iteration
           }
-        //}
+
+          if (this.topLightCounter === 0) {
+            this.lights[this.getKey(9, 8)] = {color: 'red'}
+            this.lights[this.getKey(8, 9)] = {color: 'green'}
+            this.leftLightCounter = carsFromLeftCount + 1
+          }
+        } else {
+          this.leftLightCounter--;
+
+          if (carsFromLeftCount > carsFromTopCount && this.i % 2 === 0) {
+            this.leftLightCounter++;
+            // if current line with green light have more cars dont decrease timer every 2nd iteration
+          }
+
+          if (this.leftLightCounter === 0) {
+            this.lights[this.getKey(9, 8)] = {color: 'green'}
+            this.lights[this.getKey(8, 9)] = {color: 'red'}
+            this.topLightCounter = carsFromTopCount + 1
+          }
+        }
       },
       getKey(x, y) {
         return getKey(x, y)
