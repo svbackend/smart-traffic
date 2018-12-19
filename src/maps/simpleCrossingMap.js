@@ -1,10 +1,12 @@
+import {getKey, getPositionByKey} from "../utils";
+
 /**
  * y: [0,1,2,3,4...],
  * x: [0,1,2,3,4...],
  * road: [{x: 0,y:0},{x: 1,y:1}...],
  * lights: [{position: {x: 0, y:0}, color: "green/red", },],
  */
-export function getMap(getPositionKey) {
+export function getMap() {
   let map = {
     x: [],
     y: [],
@@ -17,48 +19,54 @@ export function getMap(getPositionKey) {
     map.y.push(y);
   }
 
-  map.road = getRoad(map.x, map.y, getPositionKey);
-  map.lights = getLights(getPositionKey);
+  map.road = getRoad(map.x, map.y);
+  map.lights = getLights();
 
   return map;
 }
 
-function getRoad(x, y, getPositionKey) {
+function getRoad(x, y) {
   let road = {};
 
   for (let value in y) {
-    road[getPositionKey(9, value)] = {};
-    road[getPositionKey(10, value)] = {};
+    if (y.hasOwnProperty(value) === false) {
+      continue;
+    }
+    road[getKey(9, value)] = {};
+    road[getKey(10, value)] = {};
   }
 
   for (let value in x) {
-    road[getPositionKey(value,10)] = {};
-    road[getPositionKey(value,9)] = {};
+    if (x.hasOwnProperty(value) === false) {
+      continue;
+    }
+    road[getKey(value,10)] = {};
+    road[getKey(value,9)] = {};
   }
 
   return road;
 }
 
-function getLights(getPositionKey) {
+function getLights() {
   let lights = {};
   let topLine = [];
   let leftLine = [];
 
   for (let y = 19; y--; y >= 11) {
-    topLine.push(getPositionKey(9, y));
+    topLine.push(getKey(9, y));
   }
 
   for (let x = 0; x++; x <= 8) {
-    leftLine.push(getPositionKey(x, 9));
+    leftLine.push(getKey(x, 9));
   }
 
-  lights[getPositionKey(9, 8)] = {
+  lights[getKey(9, 8)] = {
     color: 'green',
     ourLinePositions: topLine,
     dependsOnPositions: leftLine,
   };
 
-  lights[getPositionKey(8, 9)] = {
+  lights[getKey(8, 9)] = {
     color: 'red',
     ourLinePositions: leftLine,
     dependsOnPositions: topLine,

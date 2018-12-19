@@ -35,6 +35,7 @@
 
 <script>
   import {getMap} from "./maps/simpleCrossingMap";
+  import {getKey, getPositionByKey} from "./utils";
 
   export default {
     name: 'app',
@@ -182,11 +183,10 @@
         //}
       },
       getKey(x, y) {
-        return x + '-' + y;
+        return getKey(x, y)
       },
       getPositionByKey(key) {
-        let xy = key.split('-')
-        return {x: Number.parseInt(xy[0]), y: Number.parseInt(xy[1])}
+        return getPositionByKey(key)
       },
       getCar(x, y) {
         if (this.cars.hasOwnProperty(this.getKey(x, y)) === true) {
