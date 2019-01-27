@@ -1,0 +1,41 @@
+#root {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+.map {
+  margin: 0 auto;
+  max-width: 100%;
+  .line-x {
+      display: inline;
+  }
+  .line-y {
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+  }
+  .box {
+      -webkit-transition: .8s;
+      transition: .8s;
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      vertical-align: middle;
+      padding: 4px;
+      background-color: navajowhite;
+      &.with-road {
+          background-color: grey;
+          &.with-car {
+              background-color: darkmagenta;
+              &.direction-y {
+                  background-color: cornflowerblue;
+              }
+              &.direction-x {
+                  background-color: darkslategrey;
+              }
+          }
+      }
+  }
+}
