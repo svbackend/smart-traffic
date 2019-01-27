@@ -5,29 +5,38 @@ Trying to make traffic lights' logic smarter by using cameras and cars/pedestria
 ![](example.gif)
 
 ## Project setup
+
+Pre-requirements: 
+git, nodejs, npm, typescript compiler, node-sass
+
+To install dependencies execute:
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Available Scripts
 
-### Compiles and minifies for production
-```
-npm run build
-```
+In the project directory, you can run:
 
-### Run your tests
-```
-npm run test
-```
+### `npm start`
 
-### Lints and fixes files
-```
-npm run lint
-```
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
