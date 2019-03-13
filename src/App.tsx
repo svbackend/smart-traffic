@@ -22,6 +22,16 @@ class App extends Component {
   iterate = () => {
     console.log('iteration')
     console.log(this.iteration++);
+    let carPosition = new Position(9, 0);
+    let carDestination = new Position(9, 19);
+    try {
+      this.map.addCar(carPosition, carDestination);
+    } catch (error) {
+      console.log(error)
+    }
+
+    this.map.iterate();
+    this.forceUpdate();
   }
 
   renderTiles = () => {
@@ -34,9 +44,13 @@ class App extends Component {
       for (let x of this.map.tilesX) {
         let position = new Position(x, y);
         let cssClasses = "box";
-      
+
         if (this.map.isRoad(position) === true) {
           cssClasses += " with-road";
+        }
+
+        if (this.map.isCar(position) === true) {
+          cssClasses += " with-car";
         }
 
         tilesX.push(

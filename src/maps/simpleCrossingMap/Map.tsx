@@ -42,7 +42,7 @@ export class Map implements MapInterface {
     }
 
     iterate(): void {
-        
+
     }
 
     getRoadByPosition(position: Position): RoadTileInterface | undefined {
