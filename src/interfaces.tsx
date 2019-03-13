@@ -8,8 +8,8 @@ export interface Map {
     tilesY: Array<number>;
     road: Road;
 
-    getRoadByPosition(x:number, y:number): RoadTile | undefined; // should x, y be changed to Position interface?
-    isRoad(x:number, y:number): boolean
+    getRoadByPosition(x: number, y: number): RoadTile | undefined; // should x, y be changed to Position interface?
+    isRoad(x: number, y: number): boolean
 }
 
 export interface Road {
@@ -18,4 +18,10 @@ export interface Road {
 
 export interface RoadTile {
     // todo (directions, background etc.)
+}
+
+export interface Car {
+    position: Position;
+    destination: Position;
+    driveToDestination(): void;
 }
