@@ -25,12 +25,12 @@ class App extends Component {
         }
 
         tilesX.push(
-          <div className="line-x">
+          <div className="line-x" key={x}>
             <div className={cssClasses}>{y} / {x}</div>
           </div>
         );
       }
-      tilesY.push(<div className="line-y">{tilesX}</div>);
+      tilesY.push(<div className="line-y" key={y}>{tilesX}</div>);
     }
 
     return tilesY;
