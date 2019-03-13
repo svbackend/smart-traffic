@@ -23,5 +23,5 @@ export interface RoadTile {
 export interface Car {
     position: Position;
     destination: Position;
-    driveToDestination(): void;
+    driveTo(position: Position): void;
 }

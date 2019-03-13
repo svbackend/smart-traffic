@@ -5,9 +5,22 @@ import './App.scss';
 
 class App extends Component {
   map: Map;
+  interval: NodeJS.Timeout | undefined;
+  iteration: number = 0;
   constructor(props: any) {
     super(props);
     this.map = new simpleCrossingMap; // todo: pass as a property when we would have more than 1 map
+  }
+
+  componentDidMount = () => {
+    this.interval = setInterval(() => {
+      this.iterate();
+    }, 1000);
+  }
+
+  iterate = () => {
+    console.log('iteration')
+    console.log(this.iteration++);
   }
 
   renderTiles = () => {
