@@ -1,5 +1,3 @@
-import { throws } from "assert";
-
 export interface Position {
     x: number;
     y: number;
