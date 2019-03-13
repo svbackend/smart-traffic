@@ -29,12 +29,6 @@
           background-color: grey;
           &.with-car {
               background-color: darkmagenta;
-              &.direction-y {
-                  background-color: cornflowerblue;
-              }
-              &.direction-x {
-                  background-color: darkslategrey;
-              }
           }
       }
   }

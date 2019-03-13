@@ -18,9 +18,15 @@ class App extends Component {
       tilesX = [];
 
       for (let x of this.map.tilesX) {
+        let cssClasses = "box";
+      
+        if (this.map.isRoad(x, y) === true) {
+          cssClasses += " with-road";
+        }
+
         tilesX.push(
           <div className="line-x">
-            <div className="box">{y} / {x}</div>
+            <div className={cssClasses}>{y} / {x}</div>
           </div>
         );
       }
