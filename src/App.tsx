@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Map } from './interfaces'
 import { Map as simpleCrossingMap } from './maps/simpleCrossingMap/Map'
 import './App.scss';
+import { Position } from './common/Position';
 
 class App extends Component {
   map: Map;
@@ -31,9 +32,10 @@ class App extends Component {
       tilesX = [];
 
       for (let x of this.map.tilesX) {
+        let position = new Position(x, y);
         let cssClasses = "box";
       
-        if (this.map.isRoad(x, y) === true) {
+        if (this.map.isRoad(position) === true) {
           cssClasses += " with-road";
         }
 

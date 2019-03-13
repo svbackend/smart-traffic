@@ -1,6 +1,9 @@
+import { throws } from "assert";
+
 export interface Position {
     x: number;
     y: number;
+    toString(): string;
 }
 
 export interface Map {
@@ -8,12 +11,20 @@ export interface Map {
     tilesY: Array<number>;
     road: Road;
 
-    getRoadByPosition(x: number, y: number): RoadTile | undefined; // should x, y be changed to Position interface?
-    isRoad(x: number, y: number): boolean
+    getRoadByPosition(position: Position): RoadTile | undefined;
+    getCarByPosition(position: Position): Car | undefined;
+    isRoad(position: Position): boolean;
+    isCar(position: Position): boolean;
+    addCar(position: Position, destination: Position): void;
+    iterate(): void;
 }
 
 export interface Road {
     [key: string]: RoadTile;
+}
+
+export interface Cars {
+    [key: string]: Car;
 }
 
 export interface RoadTile {
