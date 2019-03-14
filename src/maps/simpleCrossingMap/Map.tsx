@@ -9,12 +9,15 @@ import {
 import { getKey } from "../../functions"
 import { RoadTile } from "./RoadTile";
 import { Car } from "../../common/Car";
+import { PathFinder } from "../../common/PathFinder";
+import { Position as Pos } from "../../common/Position";
 
 export class Map implements MapInterface {
     tilesX: Array<number>;
     tilesY: Array<number>;
     road: RoadInterface;
-    cars: CarsInterface
+    cars: CarsInterface;
+    pathFinder: PathFinder = new PathFinder;
 
     constructor() {
         this.tilesX = [];
@@ -42,7 +45,17 @@ export class Map implements MapInterface {
     }
 
     iterate(): void {
+        for (let index in this.cars) {
+            let car: CarInterface = this.cars[index];
+            let newPosition = this.pathFinder.getNextPosition(car.position, car.destination, this.positionValidator);
+            car.driveTo(newPosition);
+            this.cars[newPosition.toString()] = car;
+            delete this.cars[index];
+        }
+    }
 
+    positionValidator (position: Position) {
+        return true;
     }
 
     getRoadByPosition(position: Position): RoadTileInterface | undefined {
