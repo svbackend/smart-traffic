@@ -9,7 +9,6 @@ import {
 import { getKey } from "../../functions"
 import { RoadTile } from "./RoadTile";
 import { Car } from "../../common/Car";
-import { PathFinder } from "../../common/PathFinder";
 import { Position as Pos } from "../../common/Position";
 
 export class Map implements MapInterface {
@@ -17,7 +16,6 @@ export class Map implements MapInterface {
     tilesY: Array<number>;
     road: RoadInterface;
     cars: CarsInterface;
-    pathFinder: PathFinder = new PathFinder;
 
     constructor() {
         this.tilesX = [];
@@ -47,9 +45,19 @@ export class Map implements MapInterface {
     iterate(): void {
         for (let index in this.cars) {
             let car: CarInterface = this.cars[index];
-            let newPosition = this.pathFinder.getNextPosition(car.position, car.destination, this.validator);
-            car.driveTo(newPosition);
-            this.cars[newPosition.toString()] = car;
+            car.driveTo(car.getNextPosition());
+
+            console.log(car)
+            if (car.position.toString() === car.destination.toString()) {
+                delete this.cars[index];
+                continue;
+            }
+
+            if (car.position.toString() === index) {
+                // if position didnt changed then we cant move this car at the moment
+                continue;
+            }
+            this.cars[car.position.toString()] = car;
             delete this.cars[index];
         }
     }
@@ -87,6 +95,12 @@ export class Map implements MapInterface {
             throw new Error("There's already a car on this position");
         }
 
-        this.cars[position.toString()] = new Car(position, destination);
+        // todo calculate path to destination as Array<Position>
+        this.cars[position.toString()] = new Car(position, destination, [
+            new Pos(9, 1),
+            new Pos(9, 2),
+            new Pos(9, 3),
+            destination
+        ]);
     }
 }

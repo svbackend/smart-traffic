@@ -34,4 +34,5 @@ export interface Car {
     position: Position;
     destination: Position;
     driveTo(position: Position): void;
+    getNextPosition(): Position;
 }
