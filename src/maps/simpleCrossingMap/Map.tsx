@@ -47,14 +47,18 @@ export class Map implements MapInterface {
     iterate(): void {
         for (let index in this.cars) {
             let car: CarInterface = this.cars[index];
-            let newPosition = this.pathFinder.getNextPosition(car.position, car.destination, this.positionValidator);
+            let newPosition = this.pathFinder.getNextPosition(car.position, car.destination, this.validator);
             car.driveTo(newPosition);
             this.cars[newPosition.toString()] = car;
             delete this.cars[index];
         }
     }
 
-    positionValidator (position: Position) {
+    validator: CallableFunction = (position: Position) => {
+        if (this.isRoad(position) === false || this.isCar(position) === true) {
+            return false;
+        }
+
         return true;
     }
 

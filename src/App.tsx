@@ -20,18 +20,19 @@ class App extends Component {
   }
 
   iterate = () => {
-    console.log('iteration')
-    console.log(this.iteration++);
-    let carPosition = new Position(9, 0);
-    let carDestination = new Position(9, 19);
     try {
-      this.map.addCar(carPosition, carDestination);
+      if (this.iteration % 5) {
+        this.map.addCar(new Position(9, 0), new Position(9, 19));
+      }
     } catch (error) {
       console.log(error)
     }
 
+    console.log(this.map.cars)
+
     this.map.iterate();
     this.forceUpdate();
+    this.iteration++;
   }
 
   renderTiles = () => {
