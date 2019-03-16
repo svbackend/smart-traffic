@@ -26,6 +26,10 @@ export interface Cars {
     [key: string]: Car;
 }
 
+export interface Positions {
+    [key: string]: Position;
+}
+
 export interface RoadTile {
     // todo (directions, background etc.)
 }
