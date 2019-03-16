@@ -4,7 +4,8 @@ import {
     Road as RoadInterface,
     RoadTile as RoadTileInterface,
     Car as CarInterface,
-    Cars as CarsInterface
+    Cars as CarsInterface,
+    Positions
 } from "../../interfaces"
 import { getKey } from "../../functions"
 import { RoadTile } from "./RoadTile";
@@ -95,12 +96,8 @@ export class Map implements MapInterface {
         }
 
         // todo calculate path to destination as Array<Position>
-        this.cars[position.toString()] = new Car(position, destination, [
-            new Pos(9, 1),
-            new Pos(9, 2),
-            new Pos(9, 3),
-            destination
-        ]);
+        let path = this.getPathForCar(position, destination);
+        this.cars[position.toString()] = new Car(position, destination, path);
     }
 
     getPathForCar(start: Position, destination: Position): Array<Position> {
@@ -109,27 +106,52 @@ export class Map implements MapInterface {
 
     getPath(start: Position, destination: Position, positionValidator: CallableFunction): Array<Position> {
         let isPathFound: boolean = false;
-        let currentPosition: Position = start;
-        let frontier: RoadInterface = {};
-        let cameFrom: RoadInterface = {};
+        let frontier: Positions = {};
+        let cameFrom: Positions = {};
         frontier[start.toString()] = start;
         cameFrom[start.toString()] = start;
 
-        while (isPathFound === false) {
-            let neighbors: Array<Position> = [
-                new Pos(currentPosition.x+1, currentPosition.y),
-                new Pos(currentPosition.x-1, currentPosition.y),
-                new Pos(currentPosition.x, currentPosition.y+1),
-                new Pos(currentPosition.x, currentPosition.y-1),
-            ];
+        while (Object.keys(frontier).length > 0) {
+            let currentPosition: Position = frontier[Object.keys(frontier)[0]];
+            delete frontier[currentPosition.toString()];
+            let neighbors: Array<Position> = this.getNeighborTilesPositions(currentPosition, positionValidator);
             
             for (let nextPosition of neighbors) {
+                console.log('Array: ' + neighbors)
+                console.log('Position:' + nextPosition)
                 if (cameFrom[nextPosition.toString()] === undefined) {
                     frontier[nextPosition.toString()] = nextPosition;
                     cameFrom[nextPosition.toString()] = currentPosition;
                 }
             }
         }
-    }
+
+        let path: Array<Position> = [];
+        let current = destination;
+        while (current.toString() !== start.toString()) {
+            path.push(current);
+            current = cameFrom[current.toString()];
+        }
     
+        return path.reverse();
+    }
+
+    getNeighborTilesPositions(position: Position, positionValidator: CallableFunction): Array<Position> {
+        let neighbors: Array<Position> = [];
+
+        let candidates = [
+            new Pos(position.x+1, position.y),
+            new Pos(position.x-1, position.y),
+            new Pos(position.x, position.y+1),
+            new Pos(position.x, position.y-1),
+        ];
+
+        for (let candidate of candidates) {
+            if (positionValidator(candidate) === true) {
+                neighbors.push(candidate);
+            }
+        }
+
+        return neighbors;
+    }
 }
