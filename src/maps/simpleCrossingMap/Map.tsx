@@ -47,7 +47,6 @@ export class Map implements MapInterface {
             let car: CarInterface = this.cars[index];
             car.driveTo(car.getNextPosition());
 
-            console.log(car)
             if (car.position.toString() === car.destination.toString()) {
                 delete this.cars[index];
                 continue;
@@ -103,4 +102,34 @@ export class Map implements MapInterface {
             destination
         ]);
     }
+
+    getPathForCar(start: Position, destination: Position): Array<Position> {
+        return this.getPath(start, destination, this.validator); // todo change validator to carPositionValidator
+    }
+
+    getPath(start: Position, destination: Position, positionValidator: CallableFunction): Array<Position> {
+        let isPathFound: boolean = false;
+        let currentPosition: Position = start;
+        let frontier: RoadInterface = {};
+        let cameFrom: RoadInterface = {};
+        frontier[start.toString()] = start;
+        cameFrom[start.toString()] = start;
+
+        while (isPathFound === false) {
+            let neighbors: Array<Position> = [
+                new Pos(currentPosition.x+1, currentPosition.y),
+                new Pos(currentPosition.x-1, currentPosition.y),
+                new Pos(currentPosition.x, currentPosition.y+1),
+                new Pos(currentPosition.x, currentPosition.y-1),
+            ];
+            
+            for (let nextPosition of neighbors) {
+                if (cameFrom[nextPosition.toString()] === undefined) {
+                    frontier[nextPosition.toString()] = nextPosition;
+                    cameFrom[nextPosition.toString()] = currentPosition;
+                }
+            }
+        }
+    }
+    
 }
