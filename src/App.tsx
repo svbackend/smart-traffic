@@ -25,7 +25,7 @@ class App extends Component {
     try {
       if (this.iteration % 2) {
         this.map.addCar(new Position(9, 0), new Position(19, 10));
-        this.map.addCar(new Position(10, 19), new Position(0, 9));
+        this.map.addCar(new Position(10, 19), new Position(10, 0));
       }
     } catch (error) {
       console.log(error)

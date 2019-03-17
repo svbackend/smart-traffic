@@ -86,19 +86,14 @@ export class Map implements MapInterface {
     }
 
     validator: CallableFunction = (current: Position, destination: Position) => {
-        console.log("Validate:");
-        console.log("From:" + current);
-        console.log("To:" + destination);
         if (this.isRoad(destination) === false) {
             return false;
         }
 
-        console.log(this.road[current.toString()]);
         if (this.road[current.toString()].directions.find(direction => direction.toString() === destination.toString()) === undefined) {
             return false;
         }
 
-        console.log("TRUE");
         return true;
     }
 
@@ -132,8 +127,19 @@ export class Map implements MapInterface {
         this.cars[position.toString()] = new Car(position, destination, path);
     }
 
+    carPathCache: {[key: string]: Array<Position>} = {}
     getPathForCar(start: Position, destination: Position): Array<Position> {
-        return this.getPath(start, destination, this.validator); // todo change validator to carPositionValidator
+        let cacheKey = start.toString() + destination.toString();
+        let path: Array<Position>;
+        
+        if (this.carPathCache[cacheKey] === undefined) {
+            path = this.getPath(start, destination, this.validator);
+            this.carPathCache[cacheKey] = path.slice(0);
+        } else {
+            path = this.carPathCache[cacheKey].slice(0);
+        }
+
+        return path;
     }
 
     getPath(start: Position, destination: Position, positionValidator: CallableFunction): Array<Position> {
@@ -162,7 +168,7 @@ export class Map implements MapInterface {
             path.push(current);
             current = cameFrom[current.toString()];
             if (current === undefined) {
-                console.log("Path from " + start + " to " + destination + " not found")
+                throw new Error("Path from " + start + " to " + destination + " not found")
                 return [];
             }
         }
