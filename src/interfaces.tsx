@@ -31,6 +31,8 @@ export interface Positions {
 }
 
 export interface RoadTile {
+    position: Position;
+    directions: Array<Position>
     // todo (directions, background etc.)
 }
 

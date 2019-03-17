@@ -31,15 +31,26 @@ export class Map implements MapInterface {
         }
 
         // Mark which tiles are road
-        let roadTile = new RoadTile;
         for (let value of this.tilesX) {
-            this.road[getKey(value, 10)] = roadTile;
-            this.road[getKey(value, 9)] = roadTile;
+            let bottomRoadLinePosition = new Pos(value, 10);
+            let topRoadLinePosition = new Pos(value, 9);
+            this.road[bottomRoadLinePosition.toString()] = new RoadTile(bottomRoadLinePosition, [
+                new Pos(bottomRoadLinePosition.x+1, bottomRoadLinePosition.y)
+            ]);
+            this.road[topRoadLinePosition.toString()] = new RoadTile(topRoadLinePosition, [
+                new Pos(topRoadLinePosition.x-1, topRoadLinePosition.y)
+            ]);
         }
 
         for (let value of this.tilesY) {
-            this.road[getKey(9, value)] = roadTile;
-            this.road[getKey(10, value)] = roadTile;
+            let leftRoadLinePosition = new Pos(9, value);
+            let rightRoadLinePosition = new Pos(10, value);
+            this.road[leftRoadLinePosition.toString()] = new RoadTile(leftRoadLinePosition, [
+                new Pos(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
+            ]);
+            this.road[rightRoadLinePosition.toString()] = new RoadTile(rightRoadLinePosition, [
+                new Pos(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
+            ]);;
         }
     }
 
@@ -117,8 +128,6 @@ export class Map implements MapInterface {
             let neighbors: Array<Position> = this.getNeighborTilesPositions(currentPosition, positionValidator);
             
             for (let nextPosition of neighbors) {
-                console.log('Array: ' + neighbors)
-                console.log('Position:' + nextPosition)
                 if (cameFrom[nextPosition.toString()] === undefined) {
                     frontier[nextPosition.toString()] = nextPosition;
                     cameFrom[nextPosition.toString()] = currentPosition;
