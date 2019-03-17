@@ -55,7 +55,7 @@ class App extends Component {
 
         tilesX.push(
           <div className="line-x" key={x}>
-            <div className={cssClasses}>{y} / {x}</div>
+            <div className={cssClasses}>{x} / {y}</div>
           </div>
         );
       }

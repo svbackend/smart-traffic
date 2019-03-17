@@ -30,7 +30,6 @@ export class Map implements MapInterface {
             this.tilesY.push(i);
         }
 
-        // Mark which tiles are road
         for (let value of this.tilesX) {
             let bottomRoadLinePosition = new Pos(value, 10);
             let topRoadLinePosition = new Pos(value, 9);
@@ -45,12 +44,24 @@ export class Map implements MapInterface {
         for (let value of this.tilesY) {
             let leftRoadLinePosition = new Pos(9, value);
             let rightRoadLinePosition = new Pos(10, value);
-            this.road[leftRoadLinePosition.toString()] = new RoadTile(leftRoadLinePosition, [
-                new Pos(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
-            ]);
-            this.road[rightRoadLinePosition.toString()] = new RoadTile(rightRoadLinePosition, [
-                new Pos(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
-            ]);;
+            if (this.road[leftRoadLinePosition.toString()] === undefined) {
+                this.road[leftRoadLinePosition.toString()] = new RoadTile(leftRoadLinePosition, [
+                    new Pos(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
+                ]);
+            } else {
+                this.road[leftRoadLinePosition.toString()].directions.push(
+                    new Pos(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
+                );
+            }
+            if (this.road[rightRoadLinePosition.toString()] === undefined) {
+                this.road[rightRoadLinePosition.toString()] = new RoadTile(rightRoadLinePosition, [
+                    new Pos(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
+                ]);
+            } else {
+                this.road[rightRoadLinePosition.toString()].directions.push(
+                    new Pos(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
+                );
+            }
         }
     }
 
@@ -73,11 +84,20 @@ export class Map implements MapInterface {
         }
     }
 
-    validator: CallableFunction = (position: Position) => {
-        if (this.isRoad(position) === false || this.isCar(position) === true) {
+    validator: CallableFunction = (current: Position, destination: Position) => {
+        console.log("Validate:");
+        console.log("From:" + current);
+        console.log("To:" + destination);
+        if (this.isRoad(destination) === false) {
             return false;
         }
 
+        console.log(this.road[current.toString()]);
+        if (this.road[current.toString()].directions.find(direction => direction.toString() === destination.toString()) === undefined) {
+            return false;
+        }
+
+        console.log("TRUE");
         return true;
     }
 
@@ -140,6 +160,10 @@ export class Map implements MapInterface {
         while (current.toString() !== start.toString()) {
             path.push(current);
             current = cameFrom[current.toString()];
+            if (current === undefined) {
+                console.log("Path from " + start + " to " + destination + " not found")
+                return [];
+            }
         }
     
         return path.reverse();
@@ -156,7 +180,7 @@ export class Map implements MapInterface {
         ];
 
         for (let candidate of candidates) {
-            if (positionValidator(candidate) === true) {
+            if (positionValidator(position, candidate) === true) {
                 neighbors.push(candidate);
             }
         }
