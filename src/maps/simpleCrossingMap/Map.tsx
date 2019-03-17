@@ -68,18 +68,19 @@ export class Map implements MapInterface {
     iterate(): void {
         for (let index in this.cars) {
             let car: CarInterface = this.cars[index];
-            car.driveTo(car.getNextPosition());
+            let nextPosition = car.getNextPosition();
 
-            if (car.position.toString() === car.destination.toString()) {
+            if (nextPosition.toString() === car.destination.toString()) {
                 delete this.cars[index];
                 continue;
             }
 
-            if (car.position.toString() === index) {
-                // if position didnt changed then we cant move this car at the moment
+            if (this.isCar(nextPosition) === true) {
                 continue;
             }
-            this.cars[car.position.toString()] = car;
+
+            car.driveTo(nextPosition);
+            this.cars[nextPosition.toString()] = car;
             delete this.cars[index];
         }
     }
