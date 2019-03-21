@@ -42,3 +42,7 @@ export interface Car {
     driveTo(position: Position): void;
     getNextPosition(): Position;
 }
+
+export interface PathFinder {
+    getPath(start: Position, destination: Position, positionValidator: CallableFunction): Array<Position>;
+}

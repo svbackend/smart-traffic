@@ -5,18 +5,21 @@ import {
     RoadTile as RoadTileInterface,
     Car as CarInterface,
     Cars as CarsInterface,
+    PathFinder as PathFinderInterface,
     Positions
 } from "../../interfaces"
 import { getKey } from "../../functions"
 import { RoadTile } from "./RoadTile";
 import { Car } from "../../common/Car";
 import { Position as Pos } from "../../common/Position";
+import { PathFinder } from "../../common/PathFinder";
 
 export class Map implements MapInterface {
     tilesX: Array<number>;
     tilesY: Array<number>;
     road: RoadInterface;
     cars: CarsInterface;
+    pathFinder: PathFinderInterface = new PathFinder;
 
     constructor() {
         this.tilesX = [];
@@ -133,7 +136,7 @@ export class Map implements MapInterface {
         let path: Array<Position>;
         
         if (this.carPathCache[cacheKey] === undefined) {
-            path = this.getPath(start, destination, this.validator);
+            path = this.pathFinder.getPath(start, destination, this.validator);
             this.carPathCache[cacheKey] = path.slice(0);
         } else {
             path = this.carPathCache[cacheKey].slice(0);
@@ -142,56 +145,5 @@ export class Map implements MapInterface {
         return path;
     }
 
-    getPath(start: Position, destination: Position, positionValidator: CallableFunction): Array<Position> {
-        let isPathFound: boolean = false;
-        let frontier: Positions = {};
-        let cameFrom: Positions = {};
-        frontier[start.toString()] = start;
-        cameFrom[start.toString()] = start;
-
-        while (Object.keys(frontier).length > 0) {
-            let currentPosition: Position = frontier[Object.keys(frontier)[0]];
-            delete frontier[currentPosition.toString()];
-            let neighbors: Array<Position> = this.getNeighborTilesPositions(currentPosition, positionValidator);
-            
-            for (let nextPosition of neighbors) {
-                if (cameFrom[nextPosition.toString()] === undefined) {
-                    frontier[nextPosition.toString()] = nextPosition;
-                    cameFrom[nextPosition.toString()] = currentPosition;
-                }
-            }
-        }
-
-        let path: Array<Position> = [];
-        let current = destination;
-        while (current.toString() !== start.toString()) {
-            path.push(current);
-            current = cameFrom[current.toString()];
-            if (current === undefined) {
-                throw new Error("Path from " + start + " to " + destination + " not found")
-                return [];
-            }
-        }
     
-        return path.reverse();
-    }
-
-    getNeighborTilesPositions(position: Position, positionValidator: CallableFunction): Array<Position> {
-        let neighbors: Array<Position> = [];
-
-        let candidates = [
-            new Pos(position.x+1, position.y),
-            new Pos(position.x-1, position.y),
-            new Pos(position.x, position.y+1),
-            new Pos(position.x, position.y-1),
-        ];
-
-        for (let candidate of candidates) {
-            if (positionValidator(position, candidate) === true) {
-                neighbors.push(candidate);
-            }
-        }
-
-        return neighbors;
-    }
 }
