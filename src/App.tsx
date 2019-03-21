@@ -51,7 +51,9 @@ class App extends Component {
         }
 
         if (this.map.isCar(position) === true) {
+          let destination = this.map.cars[position.toString()].getNextPosition(); 
           cssClasses += " with-car";
+          cssClasses += " " + this.getCssClassByDestination(position, destination);
         }
 
         tilesX.push(
@@ -74,6 +76,26 @@ class App extends Component {
         </div>
       </div>
     );
+  }
+
+  getCssClassByDestination(position: Position, destination: Position): string {
+    if (destination.x > position.x) {
+      return 'to-right';
+    }
+
+    if (destination.x < position.x) {
+      return 'to-left';
+    }
+
+    if (destination.y > position.y) {
+      return 'to-bottom';
+    }
+
+    if (destination.y < position.y) {
+      return 'to-top';
+    }
+
+    return '';
   }
 }
 

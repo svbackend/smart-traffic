@@ -17,8 +17,6 @@
       overflow: hidden;
   }
   .box {
-      -webkit-transition: .8s;
-      transition: .8s;
       display: inline-block;
       width: 36px;
       height: 36px;
@@ -28,7 +26,17 @@
       &.with-road {
           background-color: grey;
           &.with-car {
-              background-color: darkmagenta;
+              background-image: url(https://1001freedownloads.s3.amazonaws.com/vector/thumb/66433/SimpleGreenCarTopView.png); 
+              background-position: center;
+              background-repeat: no-repeat;
+              background-size: 40px 40px;
+              background-size: 40px 40px;
+              &.to-top {
+                transform: rotate(270deg);
+              }
+              &.to-bottom {
+                transform: rotate(90deg);
+              }
           }
       }
   }
