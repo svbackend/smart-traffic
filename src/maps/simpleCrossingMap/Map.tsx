@@ -88,18 +88,6 @@ export class Map implements MapInterface {
         }
     }
 
-    validator: CallableFunction = (current: Position, destination: Position) => {
-        if (this.isRoad(destination) === false) {
-            return false;
-        }
-
-        if (this.road[current.toString()].directions.find(direction => direction.toString() === destination.toString()) === undefined) {
-            return false;
-        }
-
-        return true;
-    }
-
     getRoadByPosition(position: Position): RoadTileInterface | undefined {
         return this.road[position.toString()];
     }
@@ -130,13 +118,25 @@ export class Map implements MapInterface {
         this.cars[position.toString()] = new Car(position, destination, path);
     }
 
+    carPositionValidator: CallableFunction = (current: Position, destination: Position) => {
+        if (this.isRoad(destination) === false) {
+            return false;
+        }
+
+        if (this.road[current.toString()].directions.find(direction => direction.toString() === destination.toString()) === undefined) {
+            return false;
+        }
+
+        return true;
+    }
+
     carPathCache: {[key: string]: Array<Position>} = {}
     getPathForCar(start: Position, destination: Position): Array<Position> {
         let cacheKey = start.toString() + destination.toString();
         let path: Array<Position>;
         
         if (this.carPathCache[cacheKey] === undefined) {
-            path = this.pathFinder.getPath(start, destination, this.validator);
+            path = this.pathFinder.getPath(start, destination, this.carPositionValidator);
             this.carPathCache[cacheKey] = path.slice(0);
         } else {
             path = this.carPathCache[cacheKey].slice(0);
