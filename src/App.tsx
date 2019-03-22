@@ -44,21 +44,28 @@ class App extends Component {
 
       for (let x of this.map.tilesX) {
         let position = new Position(x, y);
-        let cssClasses = "box";
+        let layer1CssClasses = "";
+        let layer2CssClasses = "";
+        let layer3CssClasses = "";
 
         if (this.map.isRoad(position) === true) {
-          cssClasses += " with-road";
+          layer1CssClasses += " with-road";
         }
 
         if (this.map.isCar(position) === true) {
           let destination = this.map.cars[position.toString()].getNextPosition(); 
-          cssClasses += " with-car";
-          cssClasses += " " + this.getCssClassByDestination(position, destination);
+          layer2CssClasses += " with-car";
+          layer2CssClasses += " " + this.getCssClassByDestination(position, destination);
         }
 
         tilesX.push(
           <div className="line-x" key={x}>
-            <div className={cssClasses}>{x} / {y}</div>
+            <div className="box">
+              <div className="info">{x} / {y}</div>
+              <div className="layer z-index-bottom"><div className={layer1CssClasses}></div></div>
+              <div className="layer z-index-middle"><div className={layer2CssClasses}></div></div>
+              <div className="layer z-index-top"><div className={layer3CssClasses}></div></div>
+            </div>
           </div>
         );
       }

@@ -1,3 +1,12 @@
+$boxSize: 36px;
+$boxPadding: 4px;
+
+@mixin layer() {
+  width: $boxSize;
+  height: $boxSize;
+  margin-top: -$boxPadding;
+}
+
 #root {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -17,27 +26,46 @@
       overflow: hidden;
   }
   .box {
+    .info {
+      position: absolute;
+      z-index: 0;
+      @include layer();
+    }
+    .layer {
+      position: absolute;
+      @include layer();
+      &.z-index-bottom {
+        z-index: 1;
+      }
+      &.z-index-middle {
+        z-index: 2;
+      }
+      &.z-index-top {
+        z-index: 3;
+      }
+      .with-road {
+        background-color: grey;
+        &.with-car {
+            background-image: url(/img/car48x48.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 32px 32px;
+            &.to-top {
+              transform: rotate(270deg);
+            }
+            &.to-bottom {
+              transform: rotate(90deg);
+            }
+        }
+    }
+    }
+
       transition: transform .2s ease-in-out;
       display: inline-block;
-      width: 36px;
-      height: 36px;
+      width: $boxSize;
+      height: $boxSize;
+      padding: $boxPadding;
       vertical-align: middle;
-      padding: 4px;
       background-color: navajowhite;
-      &.with-road {
-          background-color: grey;
-          &.with-car {
-              background-image: url(/img/car48x48.png);
-              background-position: center;
-              background-repeat: no-repeat;
-              background-size: 32px 32px;
-              &.to-top {
-                transform: rotate(270deg);
-              }
-              &.to-bottom {
-                transform: rotate(90deg);
-              }
-          }
-      }
   }
 }
