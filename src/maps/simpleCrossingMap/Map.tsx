@@ -20,6 +20,7 @@ export class Map implements MapInterface {
     road: RoadInterface;
     cars: CarsInterface;
     pathFinder: PathFinderInterface = new PathFinder;
+    movedTiles: Array<string> = [];
 
     constructor() {
         this.tilesX = [];
@@ -69,6 +70,8 @@ export class Map implements MapInterface {
     }
 
     iterate(): void {
+        this.movedTiles = [];
+        
         for (let index in this.cars) {
             let car: CarInterface = this.cars[index];
             let nextPosition = car.getNextPosition();
@@ -81,7 +84,7 @@ export class Map implements MapInterface {
             if (this.isCar(nextPosition) === true) {
                 continue;
             }
-
+            this.movedTiles.push(car.position.toString());
             car.driveTo(nextPosition);
             this.cars[nextPosition.toString()] = car;
             delete this.cars[index];

@@ -9,6 +9,7 @@ export interface Map {
     tilesY: Array<number>;
     road: Road;
     cars: Cars;
+    movedTiles: Array<string>;
 
     getRoadByPosition(position: Position): RoadTile | undefined;
     getCarByPosition(position: Position): Car | undefined;

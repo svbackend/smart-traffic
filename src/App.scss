@@ -1,10 +1,11 @@
-$boxSize: 36px;
+$boxSize: 48px;
 $boxPadding: 4px;
+$tileSize: 100%; // 8px = 2 * $boxPadding
 
 @mixin layer() {
   width: $boxSize;
   height: $boxSize;
-  margin-top: -$boxPadding;
+  // margin-top: -$boxPadding;
 }
 
 #root {
@@ -29,6 +30,7 @@ $boxPadding: 4px;
     .info {
       position: absolute;
       z-index: 0;
+      font-size: 10px;
       @include layer();
     }
     .layer {
@@ -38,33 +40,62 @@ $boxPadding: 4px;
         z-index: 1;
       }
       &.z-index-middle {
+        div {
+          left: 0;
+          transition:left 1s linear;
+        }
         z-index: 2;
       }
       &.z-index-top {
         z-index: 3;
       }
+      .tile {
+        width: $tileSize;
+        height: $tileSize;
+        background: transparent;
+        transition: .8s;
+      }
       .with-road {
         background-color: grey;
-        &.with-car {
-            background-image: url(/img/car48x48.png);
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 32px 32px;
-            &.to-top {
-              transform: rotate(270deg);
-            }
-            &.to-bottom {
-              transform: rotate(90deg);
-            }
+      }
+      .with-car {
+        transition: .8s;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 48px 48px;
+        &.to-top {
+          &.move {
+            transition: .8s;
+            transform: translate3d(0, -48px, 0);
+          }
+          background-image: url(/img/t_car48x48.png);
         }
+        &.to-bottom {
+          &.move {
+            transform: translate3d(0, 48px, 0);
+          }
+          background-image: url(/img/b_car48x48.png);
+          //transform: rotate(90deg);
+        }
+        &.to-left {
+          &.move {
+            transform: translate3d(-48px, 0, 0);
+          }
+          background-image: url(/img/l_car48x48.png);
+          //transform: rotate(90deg);
+        }
+        &.to-right {
+          &.move {
+            transform: translate3d(48px, 0, 0);
+          }
+          background-image: url(/img/r_car48x48.png);
+          //transform: rotate(90deg);
+        }
+      }
     }
-    }
-
-      transition: transform .2s ease-in-out;
       display: inline-block;
       width: $boxSize;
       height: $boxSize;
-      padding: $boxPadding;
       vertical-align: middle;
       background-color: navajowhite;
   }
