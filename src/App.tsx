@@ -6,7 +6,7 @@ import { Position } from './common/Position';
 
 class App extends Component {
   map: Map;
-  interval: NodeJS.Timeout | undefined;
+  interval: any;
   iteration: number = 0;
   constructor(props: any) {
     super(props);
@@ -25,6 +25,7 @@ class App extends Component {
     try {
       if (this.iteration % 2) {
         this.map.addCar(new Position(9, 0), new Position(19, 10));
+        this.map.addCar(new Position(8, 0), new Position(0, 9));
         this.map.addCar(new Position(10, 19), new Position(10, 0));
       }
     } catch (error) {
@@ -33,6 +34,9 @@ class App extends Component {
     
     this.forceUpdate();
     this.iteration++;
+    if (this.iteration === 20) {
+      //clearInterval(this.interval);
+    }
   }
 
   renderTiles = () => {

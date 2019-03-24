@@ -53,41 +53,30 @@ $tileSize: 100%; // 8px = 2 * $boxPadding
         width: $tileSize;
         height: $tileSize;
         background: transparent;
-        transition: .8s;
       }
       .with-road {
         background-color: grey;
       }
       .with-car {
-        transition: .8s;
         background-position: center;
         background-repeat: no-repeat;
         background-size: 48px 48px;
         &.to-top {
-          &.move {
-            transition: .8s;
-            transform: translate3d(0, -48px, 0);
-          }
+          animation: toTop 1.1s ease-in-out;
           background-image: url(/img/t_car48x48.png);
         }
         &.to-bottom {
-          &.move {
-            transform: translate3d(0, 48px, 0);
-          }
+          animation: toBottom 1.1s ease;
           background-image: url(/img/b_car48x48.png);
           //transform: rotate(90deg);
         }
         &.to-left {
-          &.move {
-            transform: translate3d(-48px, 0, 0);
-          }
+          animation: toLeft 1.1s ease;
           background-image: url(/img/l_car48x48.png);
           //transform: rotate(90deg);
         }
         &.to-right {
-          &.move {
-            transform: translate3d(48px, 0, 0);
-          }
+          animation: toRight 1.4s ease;
           background-image: url(/img/r_car48x48.png);
           //transform: rotate(90deg);
         }
@@ -99,4 +88,24 @@ $tileSize: 100%; // 8px = 2 * $boxPadding
       vertical-align: middle;
       background-color: navajowhite;
   }
+}
+
+@keyframes toTop {
+  0%   { padding-top: 96px; }
+  100% { padding-top: 0; }
+}
+
+@keyframes toRight {
+  0%   { padding-right: 0; }
+  100% { padding-right: 96px; }
+}
+
+@keyframes toBottom {
+  0%   { margin-top: -48px; }
+  100% { margin-top: 0; }
+}
+
+@keyframes toLeft {
+  0%   { padding-left: 96px; }
+  100% { padding-left: 0; }
 }

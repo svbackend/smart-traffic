@@ -66,11 +66,18 @@ export class Map implements MapInterface {
                     new Pos(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
                 );
             }
+
+            if (value <= 8) {
+                let leftRoadLinePosition2 = new Pos(8, value);
+                this.road[leftRoadLinePosition2.toString()] = new RoadTile(leftRoadLinePosition2, [
+                    new Pos(leftRoadLinePosition2.x, leftRoadLinePosition2.y+1)
+                ]);
+            }
         }
     }
 
     iterate(): void {
-        this.movedTiles = [];
+        //this.movedTiles = [];
         
         for (let index in this.cars) {
             let car: CarInterface = this.cars[index];
@@ -84,7 +91,7 @@ export class Map implements MapInterface {
             if (this.isCar(nextPosition) === true) {
                 continue;
             }
-            this.movedTiles.push(car.position.toString());
+            //this.movedTiles.push(car.position.toString());
             car.driveTo(nextPosition);
             this.cars[nextPosition.toString()] = car;
             delete this.cars[index];
