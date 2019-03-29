@@ -1,3 +1,5 @@
+import { TrafficLightState } from "./common/TrafficLightState";
+
 export interface Position {
     x: number;
     y: number;
@@ -49,4 +51,6 @@ export interface PathFinder {
 
 export interface TrafficLight {
     watchedLines: Array<Position>;
+    conflicts: Array<TrafficLight>;
+    state: TrafficLightState;
 }
