@@ -50,10 +50,10 @@ export interface PathFinder {
 }
 
 export interface TrafficLight {
-    watchedLines: Array<Position>;
-    conflicts: Array<TrafficLight>;
+    watchedPositions: Array<Position>; // we will count amount of traffic on provided positions 
+    conflicts: Array<TrafficLight>; // if one of these TrafficLights have GREEN state then current one should be RED
     state: TrafficLightState;
-    stopPositions: Array<Position>;
+    stopPositions: Array<Position>; // on these positions cars/pedestrians should stop until GREEN state 
 }
 
 export interface TrafficLightsLogic {
