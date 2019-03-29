@@ -34,7 +34,6 @@ export interface Positions {
 export interface RoadTile {
     position: Position;
     directions: Array<Position>
-    // todo (directions, background etc.)
 }
 
 export interface Car {
@@ -46,4 +45,8 @@ export interface Car {
 
 export interface PathFinder {
     getPath(start: Position, destination: Position, positionValidator: CallableFunction): Array<Position>;
+}
+
+export interface TrafficLight {
+    watchedLines: Array<Position>;
 }
