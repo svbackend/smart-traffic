@@ -53,4 +53,9 @@ export interface TrafficLight {
     watchedLines: Array<Position>;
     conflicts: Array<TrafficLight>;
     state: TrafficLightState;
+    stopPositions: Array<Position>;
+}
+
+export interface TrafficLightsLogic {
+    iterate(): void;
 }
