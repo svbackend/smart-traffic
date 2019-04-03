@@ -1,5 +1,5 @@
 import { Car as CarInterface } from "../interfaces";
-import { Position } from "../Position";
+import { Position } from "../common/Position";
 
 export class Car {
     position: Position;
