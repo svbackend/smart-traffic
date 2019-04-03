@@ -1,5 +1,5 @@
 import { PathFinder as PathFinderInterface, Positions } from "../interfaces"
-import { Position } from "../Position";
+import { Position } from "../common/Position";
 import { Position as Pos } from "./Position";
 
 export class PathFinder implements PathFinderInterface {
