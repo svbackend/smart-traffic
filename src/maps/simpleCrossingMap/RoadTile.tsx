@@ -1,4 +1,5 @@
-import { RoadTile as RoadTileInterface, Position as PositionInterface } from "../../interfaces"
+import { RoadTile as RoadTileInterface } from "../../interfaces"
+import { Position as PositionInterface } from "../../Position";
 export class RoadTile implements RoadTileInterface {
     position: PositionInterface;
     directions: Array<PositionInterface>;

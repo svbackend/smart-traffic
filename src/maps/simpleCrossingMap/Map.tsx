@@ -1,5 +1,4 @@
 import {
-    Position,
     Map as MapInterface,
     Road as RoadInterface,
     RoadTile as RoadTileInterface,
@@ -8,6 +7,7 @@ import {
     PathFinder as PathFinderInterface,
     Positions
 } from "../../interfaces"
+import { Position } from "../../Position";
 import { getKey } from "../../functions"
 import { RoadTile } from "./RoadTile";
 import { Car } from "../../common/Car";
