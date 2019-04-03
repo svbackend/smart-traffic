@@ -1,8 +1,4 @@
-export interface Position {
-    x: number;
-    y: number;
-    toString(): string;
-}
+import { Position } from "./common/Position"
 
 export interface Map {
     tilesX: Array<number>;

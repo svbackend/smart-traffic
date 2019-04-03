@@ -1,7 +1,6 @@
-import { Position as PositionInterface } from "../interfaces"
 import { getKey } from "../functions";
 
-export class Position implements PositionInterface {
+export class Position {
     x: number;
     y: number;
     
