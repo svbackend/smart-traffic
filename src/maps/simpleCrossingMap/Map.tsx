@@ -7,11 +7,10 @@ import {
     PathFinder as PathFinderInterface,
     Positions
 } from "../../interfaces"
-import { Position } from "../../Position";
 import { getKey } from "../../functions"
 import { RoadTile } from "./RoadTile";
 import { Car } from "../../common/Car";
-import { Position as Pos } from "../../common/Position";
+import { Position } from "../../common/Position";
 import { PathFinder } from "../../common/PathFinder";
 
 export class Map implements MapInterface {
@@ -35,42 +34,42 @@ export class Map implements MapInterface {
         }
 
         for (let value of this.tilesX) {
-            let bottomRoadLinePosition = new Pos(value, 10);
-            let topRoadLinePosition = new Pos(value, 9);
+            let bottomRoadLinePosition = new Position(value, 10);
+            let topRoadLinePosition = new Position(value, 9);
             this.road[bottomRoadLinePosition.toString()] = new RoadTile(bottomRoadLinePosition, [
-                new Pos(bottomRoadLinePosition.x+1, bottomRoadLinePosition.y)
+                new Position(bottomRoadLinePosition.x+1, bottomRoadLinePosition.y)
             ]);
             this.road[topRoadLinePosition.toString()] = new RoadTile(topRoadLinePosition, [
-                new Pos(topRoadLinePosition.x-1, topRoadLinePosition.y)
+                new Position(topRoadLinePosition.x-1, topRoadLinePosition.y)
             ]);
         }
 
         for (let value of this.tilesY) {
-            let leftRoadLinePosition = new Pos(9, value);
-            let rightRoadLinePosition = new Pos(10, value);
+            let leftRoadLinePosition = new Position(9, value);
+            let rightRoadLinePosition = new Position(10, value);
             if (this.road[leftRoadLinePosition.toString()] === undefined) {
                 this.road[leftRoadLinePosition.toString()] = new RoadTile(leftRoadLinePosition, [
-                    new Pos(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
+                    new Position(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
                 ]);
             } else {
                 this.road[leftRoadLinePosition.toString()].directions.push(
-                    new Pos(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
+                    new Position(leftRoadLinePosition.x, leftRoadLinePosition.y+1)
                 );
             }
             if (this.road[rightRoadLinePosition.toString()] === undefined) {
                 this.road[rightRoadLinePosition.toString()] = new RoadTile(rightRoadLinePosition, [
-                    new Pos(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
+                    new Position(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
                 ]);
             } else {
                 this.road[rightRoadLinePosition.toString()].directions.push(
-                    new Pos(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
+                    new Position(rightRoadLinePosition.x, rightRoadLinePosition.y-1)
                 );
             }
 
             if (value <= 8) {
-                let leftRoadLinePosition2 = new Pos(8, value);
+                let leftRoadLinePosition2 = new Position(8, value);
                 this.road[leftRoadLinePosition2.toString()] = new RoadTile(leftRoadLinePosition2, [
-                    new Pos(leftRoadLinePosition2.x, leftRoadLinePosition2.y+1)
+                    new Position(leftRoadLinePosition2.x, leftRoadLinePosition2.y+1)
                 ]);
             }
         }
