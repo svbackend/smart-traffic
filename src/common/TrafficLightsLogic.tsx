@@ -1,7 +1,7 @@
-import { TrafficLightsLogic as TrafficLightsLogicInterface, Position as PositionInterface, Map } from "../interfaces";
+import { TrafficLightsLogic as TrafficLightsLogicInterface, Map } from "../interfaces";
 import { TrafficLightState } from "./TrafficLightState";
 import { TrafficLight } from "./TrafficLight";
-import { throws } from "assert";
+import { Position } from "./Position";
 
 export class TrafficLightsLogic implements TrafficLightsLogicInterface {
     trafficLights: Array<TrafficLight>;
@@ -10,22 +10,27 @@ export class TrafficLightsLogic implements TrafficLightsLogicInterface {
     constructor(trafficLights: Array<TrafficLight>, map: Map) {
         this.trafficLights = trafficLights;
         this.map = map;
+
+        this.calcAmountOfTraffic();
+        // todo: setup timers and turn on set of lights (set few lights to GREEN state)
         // todo: build dependency tree of traffic lights ??? (Im not sure that I need it)
     }
-
+    
     iterate(): void {
-        for (let light of this.trafficLights) {
-            let amountOfTraffic = this.calcAmountOfTraffic(light.watchedPositions);
-        }
+        this.calcAmountOfTraffic();
+        // todo
     }
 
-    calcAmountOfTraffic(positions: Array<PositionInterface>): number {
+    private calcAmountOfTraffic(): void {
         let sumOfCars = 0;
-        for (let position of positions) {
-            if (this.map.isCar(position) === true) {
-                sumOfCars++;
+        for (let light of this.trafficLights) {
+            for (let position of light.watchedPositions) {
+                if (this.map.isCar(position) === true) {
+                    sumOfCars++;
+                }
             }
-        }
-        return sumOfCars;
+            light.amountOfTraffic = sumOfCars;
+            sumOfCars = 0;
+        }   
     }
 }
