@@ -4,6 +4,10 @@ Trying to make traffic lights' logic smarter by using cameras and cars/pedestria
 
 ![](example.gif)
 
+## Related
+
+https://habr.com/ru/post/553162/
+
 ## Project setup
 
 Pre-requirements: 
