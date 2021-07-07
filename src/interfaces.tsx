@@ -1,3 +1,4 @@
+import { TrafficLightState } from "./common/TrafficLightState";
 import { Position } from "./common/Position"
 
 export interface Map {
@@ -30,7 +31,6 @@ export interface Positions {
 export interface RoadTile {
     position: Position;
     directions: Array<Position>
-    // todo (directions, background etc.)
 }
 
 export interface Car {
@@ -42,4 +42,15 @@ export interface Car {
 
 export interface PathFinder {
     getPath(start: Position, destination: Position, positionValidator: CallableFunction): Array<Position>;
+}
+
+export interface TrafficLight {
+    watchedPositions: Array<Position>; // we will count amount of traffic on provided positions 
+    conflicts: Array<TrafficLight>; // if one of these TrafficLights have GREEN state then current one should be RED
+    state: TrafficLightState;
+    stopPositions: Array<Position>; // on these positions cars/pedestrians should stop until GREEN state 
+}
+
+export interface TrafficLightsLogic {
+    iterate(): void;
 }
